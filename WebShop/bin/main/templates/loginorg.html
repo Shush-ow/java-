@@ -1,122 +1,125 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="utf-8">
-    <title>Web Shop LogIn</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Creepster&family=Shippori+Mincho&display=swap');
-        
-        body {
-            background-color: #050000;
-            color: #8b0000;
-            font-family: 'Shippori Mincho', 'Georgia', serif;
-            background-image: 
-                radial-gradient(circle, rgba(16,0,0,0.8) 0%, rgba(0,0,0,1) 80%),
-                repeating-linear-gradient(0deg, rgba(0,0,0,0.15) 0px, rgba(0,0,0,0.15) 1px, transparent 1px, transparent 2px);
-            background-attachment: fixed;
-            margin: 0;
-            padding: 40px 20px;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-shadow: 0 0 8px rgba(139, 0, 0, 0.8), 1px 1px 2px #000;
-            overflow-x: hidden;
-        }
-        body::before {
-            content: " ";
-            display: block;
-            position: fixed;
-            top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 255, 0, 0.06));
-            z-index: 9999;
-            opacity: 0.8;
-            pointer-events: none;
-            background-size: 100% 4px, 6px 100%;
-        }
-        h1, h2, h3, h4 {
-            font-family: 'Creepster', 'Shippori Mincho', serif;
-            color: #ff0000;
-            text-align: center;
-            letter-spacing: 3px;
-            margin-bottom: 20px;
-            animation: pulse 4s infinite alternate;
-        }
-        form {
-            background: rgba(10, 2, 2, 0.9);
-            border: 2px solid #5a0000;
-            padding: 30px;
-            border-radius: 5px;
-            box-shadow: 0 0 30px rgba(139, 0, 0, 0.6), inset 0 0 15px rgba(0,0,0,0.9);
-            width: 100%;
-            max-width: 450px;
-            box-sizing: border-box;
-            position: relative;
-        }
-        p {
-            margin: 20px 0;
-            font-size: 1.1em;
-            color: #b5b5b5;
-            border-bottom: 1px solid rgba(139, 0, 0, 0.3);
-            padding-bottom: 10px;
-        }
-        input[type="text"], input[type="password"] {
-            width: 100%;
-            padding: 12px;
-            background-color: #0d0101;
-            border: 1px solid #4a0000;
-            color: #ff3333;
-            font-family: monospace;
-            font-size: 1.1em;
-            box-sizing: border-box;
-            margin-top: 8px;
-            outline: none;
-        }
-        input[type="submit"], button {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(180deg, #4a0000 0%, #1a0000 100%);
-            border: 2px solid #8b0000;
-            color: #ff3333;
-            font-family: 'Shippori Mincho', serif;
-            font-weight: bold;
-            font-size: 1.2em;
-            cursor: pointer;
-            text-shadow: 1px 1px 2px #000;
-            letter-spacing: 2px;
-            margin-top: 10px;
-        }
-        input[type="submit"]:hover, button:hover {
-            background: #ff0000;
-            color: #000000;
-            box-shadow: 0 0 25px #ff0000;
-        }
-        img {
-            max-width: 100%;
-            height: auto;
-            filter: grayscale(100%) contrast(150%) sepia(50%) hue-rotate(-50deg);
-            border: 1px solid #5a0000;
-            margin: 15px 0;
-            box-shadow: 0 0 20px rgba(255,0,0,0.4);
-        }
-        @keyframes pulse {
-            0% { text-shadow: 0 0 10px #8b0000; }
-            100% { text-shadow: 0 0 20px #ff0000, 0 0 30px #ff0000; }
-        }
-    </style>
+<meta charset="UTF-8">
+<title>わくわくWebショップ - ログイン</title>
+<style>
+    /* Google Fontsからポップなフォント（M PLUS Rounded 1c）を読み込み */
+    @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap');
+
+    body {
+        /* 背景：明るいパステルイエローと水色のグラデーション */
+        background: linear-gradient(135deg, #fff9e6 0%, #e6f7ff 100%);
+        color: #333;
+        font-family: 'M PLUS Rounded 1c', sans-serif;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+    }
+
+    h1 {
+        color: #ff6b6b; /* ポップなピンクレッド */
+        text-shadow: 2px 2px 0px #fff;
+        font-size: 2.5em;
+        margin-bottom: 5px;
+    }
+
+    h2 {
+        color: #4ecdc4; /* さわやかなターコイズブルー */
+        font-size: 1.2em;
+        margin-top: 0;
+    }
+
+    /* ログインフォームのコンテナ（ポップな枠） */
+    .login-container {
+        background-color: #ffffff;
+        border: 4px solid #ff6b6b; /* ピンクレッドの太枠 */
+        border-radius: 20px; /* 角を丸く */
+        box-shadow: 10px 10px 0px rgba(255, 107, 107, 0.2); /* ポップな影 */
+        padding: 40px;
+        width: 100%;
+        max-width: 400px;
+        text-align: center;
+        box-sizing: border-box;
+    }
+
+    p { margin: 15px 0; }
+
+    /* 入力欄のスタイル */
+    input[type="text"],
+    input[type="password"] {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #ddd;
+        border-radius: 10px;
+        font-size: 16px;
+        font-family: inherit;
+        box-sizing: border-box; /* paddingを含めたサイズ計算 */
+        transition: border-color 0.3s;
+    }
+
+    input[type="text"]:focus,
+    input[type="password"]:focus {
+        border-color: #ff6b6b; /* フォーカス時にピンクレッドに */
+        outline: none;
+    }
+
+    /* ログインボタン（楽しげなオレンジ） */
+    input[type="submit"] {
+        background: linear-gradient(180deg, #ff9f43 0%, #ff6b6b 100%);
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 25px;
+        font-size: 18px;
+        font-weight: bold;
+        font-family: inherit;
+        cursor: pointer;
+        width: 100%;
+        margin-top: 10px;
+        box-shadow: 0 4px 0px #d35400; /* 立体的な影 */
+        transition: all 0.1s;
+    }
+
+    input[type="submit"]:active {
+        box-shadow: 0 0px 0px #d35400; /* クリック時に沈む */
+        transform: translateY(4px);
+    }
+
+    /* 新規登録ボタン（優しいグリーン） */
+    .regist-btn {
+        display: inline-block;
+        background-color: #6ab04c;
+        color: white;
+        text-decoration: none;
+        padding: 8px 15px;
+        border-radius: 15px;
+        font-size: 14px;
+        margin-top: 20px;
+        box-shadow: 0 3px 0px #4a7532;
+    }
+    .regist-btn:hover { background-color: #58963f; }
+
+</style>
 </head>
 <body>
-<h1>Web ショップ販売 システム</h1>
-<img src="himalaya.png" onerror="this.style.display='none';">
-<form action="/UserLogin" method="post">
-	<p>ユーザID：<br>
-	<input type="text" name="userid"></p>
-	<p>パスワード：<br>
-	<input type="text" name="password"></p>
-	<p><input type="submit" value="ログイン"></p>
-        <h3>新規登録の方はユーザID登録ボタンをクリックしてください</h3>
-	<p><input type="submit" value="ユーザID登録"></p>
-</form>
+
+    <h1>わくわくWebショップ</h1>
+    <h2>お買い物を始めよう！</h2>
+
+    <div class="login-container">
+        <form action="/UserLogin" method="post">
+            <p>ユーザID: <input type="text" name="userid" placeholder="IDを入力してね"></p>
+            <p>パスワード: <input type="password" name="password" placeholder="パスワードを入力してね"></p>
+            <p><input type="submit" value="お店に入る！"></p>
+        </form>
+        
+        <p>はじめての方はこちら</p>
+        <a href="/registid" class="regist-btn">新規ID登録（無料）</a>
+    </div>
+
 </body>
 </html>

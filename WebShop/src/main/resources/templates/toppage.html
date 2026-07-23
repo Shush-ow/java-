@@ -1,20 +1,213 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>Web Shop Sample</title>
+<title>わくわくWebショップ - 商品一覧</title>
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Creepster&family=Shippori+Mincho&display=swap');
+    /* Google Fontsからポップなフォントを読み込み */
+    @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;900&display=swap');
+
     body {
-        background-color: #050000; color: #8b0000; font-family: 'Shippori Mincho', serif;
-        background-image: radial-gradient(circle, rgba(16,0,0,0.8) 0%, rgba(0,0,0,1) 80%);
-        min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
-        text-shadow: 0 0 8px rgba(139, 0, 0, 0.8); margin: 0; padding: 20px;
+        /* 明るいイエロー〜水色のポップな背景グラデーション */
+        background: linear-gradient(135deg, #fff9e6 0%, #e6f7ff 100%);
+        color: #333;
+        font-family: 'M PLUS Rounded 1c', sans-serif;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
     }
-    h1 { font-family: 'Creepster', serif; color: #ff0000; text-align: center; }
+
+    /* ヘッダーエリア */
+    header {
+        background-color: #ffffff;
+        border-bottom: 4px solid #ff6b6b;
+        padding: 15px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+
+    h1 {
+        font-family: 'M PLUS Rounded 1c', sans-serif;
+        font-weight: 900;
+        color: #ff6b6b;
+        font-size: 2em;
+        margin: 0;
+        text-shadow: 2px 2px 0px #ffeaa7;
+    }
+
+    /* ナビゲーション・ユーザーエリア */
+    .user-info {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .user-name {
+        font-weight: bold;
+        color: #4ecdc4;
+        background: #e8f8f5;
+        padding: 8px 15px;
+        border-radius: 20px;
+        border: 2px solid #4ecdc4;
+    }
+
+    /* ボタン共通スタイル */
+    .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        border-radius: 25px;
+        font-weight: bold;
+        text-decoration: none;
+        cursor: pointer;
+        border: none;
+        transition: all 0.1s;
+        font-family: inherit;
+    }
+
+    .btn-logout {
+        background: #ff7675;
+        color: white;
+        box-shadow: 0 4px 0px #d63031;
+    }
+
+    .btn-logout:hover {
+        background: #e17055;
+    }
+
+    /* メインコンテンツ枠 */
+    .container {
+        max-width: 1000px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+
+    .shop-title {
+        text-align: center;
+        font-size: 1.8em;
+        color: #2d3436;
+        margin-bottom: 30px;
+    }
+
+    .shop-title span {
+        color: #ff6b6b;
+    }
+
+    /* 商品カードグリッド */
+    .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 25px;
+    }
+
+    /* 個別商品カード */
+    .product-card {
+        background: #ffffff;
+        border: 4px solid #ffeaa7;
+        border-radius: 20px;
+        padding: 20px;
+        text-align: center;
+        box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.05);
+        transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .product-card:hover {
+        transform: translateY(-5px);
+        border-color: #ff6b6b;
+    }
+
+    .product-image {
+        width: 100%;
+        height: 150px;
+        background-color: #f7f1e3;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3em;
+        margin-bottom: 15px;
+    }
+
+    .product-name {
+        font-size: 1.2em;
+        font-weight: bold;
+        color: #2d3436;
+        margin: 10px 0;
+    }
+
+    .product-price {
+        font-size: 1.4em;
+        font-weight: bold;
+        color: #ff6b6b;
+        margin-bottom: 15px;
+    }
+
+    .btn-cart {
+        background: linear-gradient(180deg, #ff9f43 0%, #ff6b6b 100%);
+        color: white;
+        width: 100%;
+        font-size: 1em;
+        box-shadow: 0 4px 0px #d35400;
+    }
+
+    .btn-cart:active {
+        box-shadow: 0 0px 0px #d35400;
+        transform: translateY(4px);
+    }
 </style>
 </head>
 <body>
-<h1>Xanadu</h1>
+
+    <!-- ヘッダーエリア -->
+    <header>
+        <h1>Xanadu</h1>
+        <div class="user-info">
+            <span class="user-name">ようこそ <span th:text="${name}">顧客名</span> さん</span>
+            <form action="/UserLogout" method="post" style="margin:0;">
+                <input type="submit" value="ログアウト" class="btn btn-logout">
+            </form>
+        </div>
+    </header>
+
+    <!-- メインコンテンツ -->
+    <div class="container">
+        <h2 class="shop-title">✨ おすすめ商品 <span>Lineup</span> ✨</h2>
+
+        <div class="product-grid">
+            <!-- 商品1 -->
+            <div class="product-card">
+                <div class="product-image">🎁</div>
+                <div class="product-name">わくわくギフトボックス</div>
+                <div class="product-price">¥2,980</div>
+                <button class="btn btn-cart">カートに入れる 🛒</button>
+            </div>
+
+            <!-- 商品2 -->
+            <div class="product-card">
+                <div class="product-image">🧸</div>
+                <div class="product-name">プレミアムぬいぐるみ</div>
+                <div class="product-price">¥1,800</div>
+                <button class="btn btn-cart">カートに入れる 🛒</button>
+            </div>
+
+            <!-- 商品3 -->
+            <div class="product-card">
+                <div class="product-image">☕</div>
+                <div class="product-name">カフェタイムマグカップ</div>
+                <div class="product-price">¥1,200</div>
+                <button class="btn btn-cart">カートに入れる 🛒</button>
+            </div>
+
+            <!-- 商品4 -->
+            <div class="product-card">
+                <div class="product-image">🌟</div>
+                <div class="product-name">スターライトアクセサリー</div>
+                <div class="product-price">¥3,500</div>
+                <button class="btn btn-cart">カートに入れる 🛒</button>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>

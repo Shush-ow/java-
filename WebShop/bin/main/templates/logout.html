@@ -4,17 +4,105 @@
 <meta charset="utf-8">
 <title>Logout</title>
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Creepster&family=Shippori+Mincho&display=swap');
+    /* Google Fontsからポップなフォント（M PLUS Rounded 1c）を読み込み */
+    @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap');
+
     body {
-        background-color: #050000; color: #8b0000; font-family: 'Shippori Mincho', serif;
-        background-image: radial-gradient(circle, rgba(16,0,0,0.8) 0%, rgba(0,0,0,1) 80%);
-        min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
-        text-shadow: 0 0 8px rgba(139, 0, 0, 0.8); margin: 0; padding: 20px;
+        /* 背景：明るいパステルイエローと水色のグラデーション */
+        background: linear-gradient(135deg, #fff9e6 0%, #e6f7ff 100%);
+        color: #333;
+        font-family: 'M PLUS Rounded 1c', sans-serif;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
     }
-    h3 { font-family: 'Creepster', serif; color: #ff0000; text-align: center; }
-    form { background: rgba(10, 2, 2, 0.9); border: 2px solid #5a0000; padding: 30px; border-radius: 5px; box-shadow: 0 0 30px rgba(139, 0, 0, 0.6); max-width: 450px; width: 100%; box-sizing: border-box; }
-    input[type="submit"] { width: 100%; padding: 15px; background: linear-gradient(180deg, #4a0000 0%, #1a0000 100%); border: 2px solid #8b0000; color: #ff3333; cursor: pointer; margin-top: 10px; }
-    input[type="submit"]:hover { background: #ff0000; color: #000000; box-shadow: 0 0 25px #ff0000; }
+
+    h1 {
+        color: #ff6b6b; /* ポップなピンクレッド */
+        text-shadow: 2px 2px 0px #fff;
+        font-size: 2.5em;
+        margin-bottom: 5px;
+    }
+
+    h2 {
+        color: #4ecdc4; /* さわやかなターコイズブルー */
+        font-size: 1.2em;
+        margin-top: 0;
+    }
+
+    /* ログインフォームのコンテナ（ポップな枠） */
+    .login-container {
+        background-color: #ffffff;
+        border: 4px solid #ff6b6b; /* ピンクレッドの太枠 */
+        border-radius: 20px; /* 角を丸く */
+        box-shadow: 10px 10px 0px rgba(255, 107, 107, 0.2); /* ポップな影 */
+        padding: 40px;
+        width: 100%;
+        max-width: 400px;
+        text-align: center;
+        box-sizing: border-box;
+    }
+
+    p { margin: 15px 0; }
+
+    /* 入力欄のスタイル */
+    input[type="text"],
+    input[type="password"] {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #ddd;
+        border-radius: 10px;
+        font-size: 16px;
+        font-family: inherit;
+        box-sizing: border-box; /* paddingを含めたサイズ計算 */
+        transition: border-color 0.3s;
+    }
+
+    input[type="text"]:focus,
+    input[type="password"]:focus {
+        border-color: #ff6b6b; /* フォーカス時にピンクレッドに */
+        outline: none;
+    }
+
+    /* ログインボタン（楽しげなオレンジ） */
+    input[type="submit"] {
+        background: linear-gradient(180deg, #ff9f43 0%, #ff6b6b 100%);
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 25px;
+        font-size: 18px;
+        font-weight: bold;
+        font-family: inherit;
+        cursor: pointer;
+        width: 100%;
+        margin-top: 10px;
+        box-shadow: 0 4px 0px #d35400; /* 立体的な影 */
+        transition: all 0.1s;
+    }
+
+    input[type="submit"]:active {
+        box-shadow: 0 0px 0px #d35400; /* クリック時に沈む */
+        transform: translateY(4px);
+    }
+
+    /* 新規登録ボタン（優しいグリーン） */
+    .regist-btn {
+        display: inline-block;
+        background-color: #6ab04c;
+        color: white;
+        text-decoration: none;
+        padding: 8px 15px;
+        border-radius: 15px;
+        font-size: 14px;
+        margin-top: 20px;
+        box-shadow: 0 3px 0px #4a7532;
+    }
+    .regist-btn:hover { background-color: #58963f; }
+
 </style>
 </head>
 <body>

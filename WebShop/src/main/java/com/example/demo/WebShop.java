@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+import jakarta.servlet.http.HttpSession; // Spring Boot 2系をご利用の場合は javax.servlet.http.HttpSession に変更してください
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Controller;
@@ -24,48 +26,54 @@ public class WebShop {
 		SpringApplication.run(WebShop.class, args);
 	}
 	
-	// 初期ログイン画面の表示
+	// 初期ログイン画面（通常版：ポップなデザイン）
 	@RequestMapping("/WebShop")
 	public String Start() {
-		System.out.println("User Login Screen Requested");
+		System.out.println("Main Login Screen Requested");
 		return "loginorg.html";
 	}	
 
 	// ログイン認証処理
 	@PostMapping("/UserLogin")
-	public String loginview(Model model, @RequestParam String userid, @RequestParam String password)  {
-		String rtnhtml = "passloginorg.html"; // ログアウトボタン付きの成功画面
+	public String loginview(Model model, @RequestParam String userid, @RequestParam String password, HttpSession session) {
 		
-		// 特別ルール：LOgIN0000が送られてきたら初期ログイン画面に戻す
+		// 特別ルール1：LOgIN0000が送られてきたら初期ログイン画面に戻す
 		if (userid.equals("LOgIN0000")) {
 			return "loginorg.html";
 		}
 		
-		// 画面遷移で「ユーザID登録」ボタンが押された場合（同一formから送信されるための対策）
-		// HTML側のsubmitボタンの値や、リクエストパラメータに応じて分岐する設計に合わせます
-		// 念のため、ログイン失敗画面（reloginorgなど）からIDなしで新規登録が押された時の挙動もカバー
+		// 未入力で送信された場合は新規登録画面へ（フォームの押し間違え対策）
 		if (userid.isEmpty() || password.isEmpty()) {
 			return "registid.html";
 		}
 
-		// CSVファイルを読み込んで認証（戻り値：ファイル内の行インデックス）
+		// ★裏ページ判定★（特定の隠しID・パスワードでログインした場合）
+		if (userid.equals("SPECIAL_GUEST") && password.equals("SECRET")) {
+			System.out.println("裏ページ（ホラー画面）へようこそ...");
+			model.addAttribute("name", "特別なお客様");
+			model.addAttribute("address", "???");
+			return "passloginorg.html"; // ホラー系のログイン成功画面へ
+		}
+
+		// 通常のCSV（TXT）認証
 		int lineNo = readFile(OutputFile.location, userid);
 		
 		if (lineNo >= 0) { // ユーザーIDが存在する場合
 			String lineData = readLineData(OutputFile.location, lineNo);
 			if (lineData != null) {
 				String[] userFields = lineData.split(",");
-				if (userFields.length >= 4) {
-					String filePassword = userFields[1];
-					String customerName = userFields[2];
-					String customerAddress = userFields[3];
+				if (userFields.length >= 3) {
+					String filePassword = userFields[1]; // 2番目：パスワード
+					String customerName = userFields[2]; // 3番目：名前 (okina, narita, takayanagi, Shikata など)
 					
 					// パスワード判定
 					if (password.equals(filePassword)) {
 						System.out.println("ログイン成功: " + customerName + "様");
-						model.addAttribute("name", customerName);
-						model.addAttribute("address", customerAddress);
-						return rtnhtml; // passloginorg.html へ
+						
+						// セッションにユーザー名を保持（/toppage へ移動しても保持される）
+						session.setAttribute("userName", customerName);
+						
+						return "redirect:/toppage"; // ポップなTOPページへ遷移
 					}
 				}
 			}
@@ -73,7 +81,23 @@ public class WebShop {
 		
 		// ログイン失敗時
 		System.out.println("ログイン失敗: IDまたはパスワードが違います。");
-		return "reloginorg.html"; // 新規登録ボタン付きの再ログイン画面
+		return "reloginorg.html"; 
+	}
+
+	// 買い物を始める（ポップな商品一覧トップページ）の表示
+	@RequestMapping("/toppage")
+	public String toppageView(Model model, HttpSession session) {
+		System.out.println("Top Page Requested");
+		
+		// セッションから名前を取得
+		String userName = (String) session.getAttribute("userName");
+		if (userName == null) {
+			userName = "ゲスト"; // 直接アクセスされた等の初期値
+		}
+		
+		// HTMLテンプレートに名前を渡す
+		model.addAttribute("name", userName);
+		return "toppage.html"; 
 	}
 
 	// 新規登録画面の要求
@@ -116,8 +140,9 @@ public class WebShop {
 
 	// ログアウト処理
 	@PostMapping("/UserLogout")
-	public String logout() {
+	public String logout(HttpSession session) {
 		System.out.println("User Logged Out");
+		session.invalidate(); // セッションを破棄
 		return "logout.html";
 	}
 
@@ -126,10 +151,7 @@ public class WebShop {
 	// ユーザーIDが既にファイル内に存在するかどうかを判定
 	public boolean CheckExistingId(String id) {
 		int line = readFile(OutputFile.location, id);
-		if (line >= 0) {
-			return true; // すでに存在する
-		}
-		return false; // 存在しない（登録可能）
+		return line >= 0;
 	}
 
 	// 指定されたIDがCSVの何行目に存在するかを検索
@@ -138,10 +160,12 @@ public class WebShop {
 		int lineCount = 0;
 		File file = new File(filename);
 		
-		// ファイルがなければ自動作成する（初回ログイン・登録エラー回避のため）
+		// ファイルがなければ自動作成する
 		if (!file.exists()) {
 			try {
-				file.getParentFile().mkdirs();
+				if (file.getParentFile() != null) {
+					file.getParentFile().mkdirs();
+				}
 				file.createNewFile();
 			} catch (IOException e) {
 				System.out.println("ファイル作成エラー: " + e);
@@ -186,18 +210,17 @@ public class WebShop {
 		return null;
 	}
 
-
+	// 会員情報をCSVに追記保存する
 	public static boolean writeFile1(String textfilename, String id, String pass, String name, String adre, String mail) {
 		java.io.FileWriter fw = null;
 		try {
 			File text = new File(textfilename);
-			// フォルダが存在しない場合は作成
 			if (text.getParentFile() != null && !text.getParentFile().exists()) {
 				text.getParentFile().mkdirs();
 			}
-			fw = new java.io.FileWriter(text, true); 
+			fw = new java.io.FileWriter(text, true); // 追記モード
 			
-			String line = id + "," + pass + "," + name + "," + adre + "." + mail + "\n";
+			String line = id + "," + pass + "," + name + "," + adre + "," + mail + "\n";
 			fw.write(line);
 			fw.flush();
 			return true;
@@ -214,14 +237,6 @@ public class WebShop {
 			}
 		}
 	}
-	
-
-		@RequestMapping("/toppage")
-		public String toppageView() {
-			System.out.println("Top Page Requested");
-			return "toppage.html"; 
-		}
-	
 }
 
 // 保存先パスを保持するインナークラス
@@ -229,7 +244,7 @@ class OutputFile {
 	public static String location;
 }
 
-// 認証・セッション表示用のユーザー情報保持クラス (各処理内で安全に扱うよう変更)
+// 認証・セッション表示用のユーザー情報保持クラス
 class Info {
 	public String customerID;
 	public String customerName;
