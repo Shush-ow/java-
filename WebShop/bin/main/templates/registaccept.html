@@ -1,30 +1,101 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>Sucess Login</title>
+<title>わくわくWebショップ - 登録完了</title>
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Creepster&family=Shippori+Mincho&display=swap');
+    /* Google Fontsからポップなフォントを読み込み */
+    @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;900&display=swap');
+
     body {
-        background-color: #050000; color: #8b0000; font-family: 'Shippori Mincho', serif;
-        background-image: radial-gradient(circle, rgba(16,0,0,0.8) 0%, rgba(0,0,0,1) 80%);
-        min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
-        text-shadow: 0 0 8px rgba(139, 0, 0, 0.8); margin: 0; padding: 20px;
+        /* パステルイエロー〜水色のポップな背景グラデーション */
+        background: linear-gradient(135deg, #fff9e6 0%, #e6f7ff 100%);
+        color: #333;
+        font-family: 'M PLUS Rounded 1c', sans-serif;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+        padding: 20px;
+        box-sizing: border-box;
     }
-    h1, h4 { font-family: 'Creepster', serif; color: #ff0000; text-align: center; }
-    form { background: rgba(10, 2, 2, 0.9); border: 2px solid #5a0000; padding: 30px; border-radius: 5px; box-shadow: 0 0 30px rgba(139, 0, 0, 0.6); max-width: 450px; width: 100%; box-sizing: border-box; }
-    input[type="submit"] { width: 100%; padding: 15px; background: linear-gradient(180deg, #4a0000 0%, #1a0000 100%); border: 2px solid #8b0000; color: #ff3333; cursor: pointer; margin-top: 10px; }
-    input[type="submit"]:hover { background: #ff0000; color: #000000; box-shadow: 0 0 25px #ff0000; }
+
+    /* ポップなカードコンテナ */
+    .accept-container {
+        background: #ffffff;
+        border: 4px solid #4ecdc4; /* 爽やかなターコイズブルーの枠線 */
+        border-radius: 20px;
+        box-shadow: 10px 10px 0px rgba(78, 205, 196, 0.2);
+        padding: 40px;
+        max-width: 450px;
+        width: 100%;
+        text-align: center;
+        box-sizing: border-box;
+    }
+
+    /* アイコン演出 */
+    .icon {
+        font-size: 4em;
+        margin-bottom: 10px;
+    }
+
+    h1 {
+        font-family: 'M PLUS Rounded 1c', sans-serif;
+        font-weight: 900;
+        color: #ff6b6b;
+        font-size: 1.8em;
+        margin: 0 0 15px 0;
+        text-shadow: 2px 2px 0px #fff9e6;
+    }
+
+    p {
+        color: #555;
+        font-size: 1em;
+        line-height: 1.6;
+        margin-bottom: 25px;
+    }
+
+    /* ログイン画面に戻るボタン */
+    input[type="submit"] {
+        width: 100%;
+        padding: 15px;
+        background: linear-gradient(180deg, #ff9f43 0%, #ff6b6b 100%);
+        border: none;
+        border-radius: 25px;
+        color: #ffffff;
+        font-size: 1.1em;
+        font-weight: bold;
+        font-family: inherit;
+        cursor: pointer;
+        box-shadow: 0 4px 0px #d35400;
+        transition: all 0.1s;
+    }
+
+    input[type="submit"]:hover {
+        background: #ff9f43;
+    }
+
+    input[type="submit"]:active {
+        box-shadow: 0 0px 0px #d35400;
+        transform: translateY(4px);
+    }
 </style>
 </head>
 <body>
-<h1>ユーザIDが登録されました </h1>
-<form action="/UserLogin" method="post">
-<br>
-<h4>新規登録の方はユーザID登録ボタンをクリックしてください</h4>
-<input type="hidden" name="userid" value="LOgIN0000">
-<input type="hidden" name="password" value="00000000">
-<p><input type="submit" value="ログイン画面に戻る"></p>
-</form>
+
+<div class="accept-container">
+    <div class="icon">🎉</div>
+    <h1>登録が完了しました！</h1>
+    <p>会員IDの登録が正常に完了しました。<br>さっそくログインしてお買い物を楽しもう！</p>
+
+    <form action="/UserLogin" method="post" style="margin: 0;">
+        <input type="hidden" name="userid" value="LOgIN0000">
+        <input type="hidden" name="password" value="00000000">
+        <input type="submit" value="ログイン画面に戻る ➔">
+    </form>
+</div>
+
 </body>
 </html>

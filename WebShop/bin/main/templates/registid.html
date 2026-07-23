@@ -1,40 +1,144 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="utf-8">
-<title>Registration</title>
+<title>わくわくWebショップ - 新規会員登録</title>
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Creepster&family=Shippori+Mincho&display=swap');
+    /* Google Fontsからポップなフォントを読み込み */
+    @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;900&display=swap');
+
     body {
-        background-color: #050000; color: #8b0000; font-family: 'Shippori Mincho', serif;
-        background-image: radial-gradient(circle, rgba(16,0,0,0.8) 0%, rgba(0,0,0,1) 80%);
-        min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
-        text-shadow: 0 0 8px rgba(139, 0, 0, 0.8); margin: 0; padding: 20px;
+        /* パステルイエロー〜水色のポップな背景グラデーション */
+        background: linear-gradient(135deg, #fff9e6 0%, #e6f7ff 100%);
+        color: #333;
+        font-family: 'M PLUS Rounded 1c', sans-serif;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+        padding: 20px;
+        box-sizing: border-box;
     }
-    h3 { font-family: 'Creepster', serif; color: #ff0000; text-align: center; }
-    form { background: rgba(10, 2, 2, 0.9); border: 2px solid #5a0000; padding: 30px; border-radius: 5px; box-shadow: 0 0 30px rgba(139, 0, 0, 0.6); max-width: 450px; width: 100%; box-sizing: border-box; }
-    p { margin: 15px 0; color: #b5b5b5; border-bottom: 1px solid rgba(139, 0, 0, 0.3); padding-bottom: 5px; }
-    input[type="text"] { width: 100%; padding: 10px; background-color: #0d0101; border: 1px solid #4a0000; color: #ff3333; }
-    input[type="submit"] { width: 100%; padding: 15px; background: linear-gradient(180deg, #4a0000 0%, #1a0000 100%); border: 2px solid #8b0000; color: #ff3333; cursor: pointer; margin-top: 10px; }
-    input[type="submit"]:hover { background: #ff0000; color: #000000; box-shadow: 0 0 25px #ff0000; }
+
+    h3 {
+        font-family: 'M PLUS Rounded 1c', sans-serif;
+        font-weight: 900;
+        color: #ff6b6b;
+        font-size: 2em;
+        text-align: center;
+        margin-bottom: 20px;
+        text-shadow: 2px 2px 0px #fff;
+    }
+
+    /* フォーム全体の枠 */
+    form {
+        background: #ffffff;
+        border: 4px solid #ff6b6b;
+        border-radius: 20px;
+        box-shadow: 10px 10px 0px rgba(255, 107, 107, 0.2);
+        padding: 30px;
+        max-width: 450px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    p {
+        margin: 15px 0 5px 0;
+        color: #2d3436;
+        font-weight: bold;
+        font-size: 0.95em;
+    }
+
+    /* 入力フィールド */
+    input[type="text"],
+    input[type="password"] {
+        width: 100%;
+        padding: 12px;
+        margin-top: 5px;
+        border: 2px solid #dfe6e9;
+        border-radius: 10px;
+        font-size: 15px;
+        font-family: inherit;
+        box-sizing: border-box;
+        transition: border-color 0.2s;
+    }
+
+    input[type="text"]:focus,
+    input[type="password"]:focus {
+        border-color: #ff6b6b;
+        outline: none;
+    }
+
+    /* 登録ボタン（グリーン系で特別感） */
+    input[type="submit"] {
+        width: 100%;
+        padding: 14px;
+        background: linear-gradient(180deg, #2ed573 0%, #26af5f 100%);
+        border: none;
+        border-radius: 25px;
+        color: #ffffff;
+        font-size: 1.2em;
+        font-weight: bold;
+        font-family: inherit;
+        cursor: pointer;
+        margin-top: 25px;
+        box-shadow: 0 4px 0px #1e8449;
+        transition: all 0.1s;
+    }
+
+    input[type="submit"]:hover {
+        background: #2ed573;
+    }
+
+    input[type="submit"]:active {
+        box-shadow: 0 0px 0px #1e8449;
+        transform: translateY(4px);
+    }
+
+    /* 戻るリンク */
+    .back-link {
+        display: block;
+        text-align: center;
+        margin-top: 20px;
+        color: #4ecdc4;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .back-link:hover {
+        text-decoration: underline;
+    }
 </style>
 </head>
 <body>
-<h3>新規会員の登録をします</h3>
+
+<h3>✨ 新規会員の登録 ✨</h3>
+
 <form action="/RegistUserID" method="post">
-	<p>ご希望のユーザIDを入力してください<br>
-	<input type="text" name="userid"></p>
-	<p>パスワードを入力してください<br>
-	<input type="text" name="password1"></p>
-        <p>同じパスワードを入力してください<br>
-	<input type="text" name="password2"></p>
-	<p>お名前（姓名）を入力してください<br>
-	<input type="text" name="username"></p>
-	<p>住所を入力してください<br>
-	<input type="text" name="address"></p>
-	<p>メールアドレス入力してください<br>
-	<input type="text" name="email"></p>
-	<p><input type="submit" value="登録"></p>
+	<p>ご希望のユーザIDを入力してください</p>
+	<input type="text" name="userid" placeholder="例: user123">
+
+	<p>パスワードを入力してください</p>
+	<input type="password" name="password1" placeholder="パスワード">
+
+	<p>同じパスワードをもう一度入力してください</p>
+	<input type="password" name="password2" placeholder="パスワード確認">
+
+	<p>お名前（姓名）を入力してください</p>
+	<input type="text" name="username" placeholder="例: 山田 太郎">
+
+	<p>住所を入力してください</p>
+	<input type="text" name="address" placeholder="例: 東京都渋谷区...">
+
+	<p>メールアドレスを入力してください</p>
+	<input type="text" name="email" placeholder="例: example@mail.com">
+
+	<p><input type="submit" value="登録する！"></p>
+    
+    <a href="/WebShop" class="back-link">ログイン画面に戻る</a>
 </form>
+
 </body>
 </html>
