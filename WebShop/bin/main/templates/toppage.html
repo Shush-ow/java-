@@ -2,157 +2,212 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>わくわくWebショップ - 商品一覧</title>
+<title>Xanadu - PRODUCTS</title>
 <style>
-    /* Google Fontsからポップなフォントを読み込み */
-    @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;900&display=swap');
+    /* Google Fontsから無機質で洗練された標準フォント（Inter）を読み込み */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Sans+JP:wght@300;400;500&display=swap');
+
+    * {
+        box-sizing: border-box;
+    }
 
     body {
-        /* 明るいイエロー〜水色のポップな背景グラデーション */
-        background: linear-gradient(135deg, #fff9e6 0%, #e6f7ff 100%);
-        color: #333;
-        font-family: 'M PLUS Rounded 1c', sans-serif;
+        /* 背景：ごく僅かに青みがかった冷たいダークグレー */
+        background-color: #0f1115;
+        color: #e2e8f0;
+        font-family: 'Inter', 'Noto Sans JP', -apple-system, sans-serif;
         margin: 0;
         padding: 0;
         min-height: 100vh;
-	
+        letter-spacing: 0.05em;
+    }
+
     /* ヘッダーエリア */
     header {
-        background-color: #ffffff;
-        border-bottom: 4px solid #ff6b6b;
-        padding: 15px 30px;
+        background-color: #161a22;
+        border-bottom: 1px solid #262c36;
+        padding: 18px 40px;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
     }
 
     h1 {
-        font-family: 'M PLUS Rounded 1c', sans-serif;
-        font-weight: 900;
-        color: #ff6b6b;
-        font-size: 2em;
+        font-size: 1.25rem;
+        font-weight: 500;
+        color: #ffffff;
+        letter-spacing: 0.2em;
         margin: 0;
-        text-shadow: 2px 2px 0px #ffeaa7;
+        text-transform: uppercase;
     }
 
     /* ナビゲーション・ユーザーエリア */
     .user-info {
         display: flex;
         align-items: center;
-        gap: 15px;
+        gap: 24px;
     }
 
     .user-name {
-        font-weight: bold;
-        color: #4ecdc4;
-        background: #e8f8f5;
-        padding: 8px 15px;
-        border-radius: 20px;
-        border: 2px solid #4ecdc4;
+        font-size: 0.8rem;
+        color: #94a3b8;
+        letter-spacing: 0.05em;
+    }
+
+    .user-name span {
+        color: #f1f5f9;
+        font-weight: 500;
     }
 
     /* ボタン共通スタイル */
     .btn {
         display: inline-block;
-        padding: 10px 20px;
-        border-radius: 25px;
-        font-weight: bold;
+        padding: 8px 16px;
+        border-radius: 4px;
+        font-size: 0.78rem;
+        font-weight: 500;
         text-decoration: none;
         cursor: pointer;
         border: none;
-        transition: all 0.1s;
+        letter-spacing: 0.08em;
+        transition: all 0.2s ease;
         font-family: inherit;
     }
 
     .btn-logout {
-        background: #ff7675;
-        color: white;
-        box-shadow: 0 4px 0px #d63031;
+        background-color: transparent;
+        color: #94a3b8;
+        border: 1px solid #2a313d;
     }
 
     .btn-logout:hover {
-        background: #e17055;
+        border-color: #475569;
+        color: #f1f5f9;
+        background-color: rgba(255, 255, 255, 0.02);
     }
 
     /* メインコンテンツ枠 */
     .container {
-        max-width: 1000px;
-        margin: 40px auto;
-        padding: 0 20px;
+        max-width: 1100px;
+        margin: 40px auto 80px;
+        padding: 0 24px;
+    }
+
+    .shop-title-area {
+        margin-bottom: 40px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid #262c36;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
     }
 
     .shop-title {
-        text-align: center;
-        font-size: 1.8em;
-        color: #2d3436;
-        margin-bottom: 30px;
+        font-size: 1.1rem;
+        font-weight: 500;
+        color: #ffffff;
+        margin: 0;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
     }
 
-    .shop-title span {
-        color: #ff6b6b;
+    .item-count {
+        font-size: 0.75rem;
+        color: #64748b;
+        letter-spacing: 0.08em;
     }
 
     /* 商品カードグリッド */
     .product-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 25px;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 24px;
     }
 
     /* 個別商品カード */
     .product-card {
-        background: #ffffff;
-        border: 4px solid #ffeaa7;
-        border-radius: 20px;
-        padding: 20px;
-        text-align: center;
-        box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.05);
-        transition: transform 0.2s, border-color 0.2s;
+        background-color: #161a22;
+        border: 1px solid #262c36;
+        border-radius: 6px;
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        transition: border-color 0.2s ease;
     }
 
     .product-card:hover {
-        transform: translateY(-5px);
-        border-color: #ff6b6b;
+        border-color: #475569;
     }
 
     .product-image {
         width: 100%;
-        height: 150px;
-        background-color: #f7f1e3;
-        border-radius: 15px;
+        aspect-ratio: 1;
+        background-color: #0b0d11;
+        border: 1px solid #1e242e;
+        border-radius: 4px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 3em;
-        margin-bottom: 15px;
+        margin-bottom: 16px;
+        overflow: hidden;
+    }
+
+    .product-image svg {
+        width: 40px;
+        height: 40px;
+        stroke: #334155;
+    }
+
+    .product-details {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+
+    .product-category {
+        font-size: 0.7rem;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 4px;
     }
 
     .product-name {
-        font-size: 1.2em;
-        font-weight: bold;
-        color: #2d3436;
-        margin: 10px 0;
+        font-size: 0.88rem;
+        font-weight: 400;
+        color: #f1f5f9;
+        margin: 0 0 12px 0;
+        letter-spacing: 0.03em;
+        line-height: 1.4;
     }
 
     .product-price {
-        font-size: 1.4em;
-        font-weight: bold;
-        color: #ff6b6b;
-        margin-bottom: 15px;
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: #ffffff;
+        margin-bottom: 16px;
+        margin-top: auto;
+        letter-spacing: 0.05em;
     }
 
     .btn-cart {
-        background: linear-gradient(180deg, #ff9f43 0%, #ff6b6b 100%);
-        color: white;
+        background-color: #e2e8f0;
+        color: #0f1115;
         width: 100%;
-        font-size: 1em;
-        box-shadow: 0 4px 0px #d35400;
+        padding: 10px;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+
+    .btn-cart:hover {
+        background-color: #ffffff;
     }
 
     .btn-cart:active {
-        box-shadow: 0 0px 0px #d35400;
-        transform: translateY(4px);
+        opacity: 0.8;
     }
 </style>
 </head>
@@ -162,47 +217,79 @@
     <header>
         <h1>Xanadu</h1>
         <div class="user-info">
-            <span class="user-name">ようこそ <span th:text="${name}">顧客名</span> さん</span>
+            <span class="user-name">USER: <span th:text="${name}">GUEST</span></span>
             <form action="/UserLogout" method="post" style="margin:0;">
-                <input type="submit" value="ログアウト" class="btn btn-logout">
+                <input type="submit" value="LOGOUT" class="btn btn-logout">
             </form>
         </div>
     </header>
 
     <!-- メインコンテンツ -->
     <div class="container">
-        <h2 class="shop-title">✨ おすすめ商品 <span>Lineup</span> ✨</h2>
+        <div class="shop-title-area">
+            <h2 class="shop-title">COLLECTION / ALL ITEMS</h2>
+            <span class="item-count">4 ITEMS</span>
+        </div>
 
         <div class="product-grid">
             <!-- 商品1 -->
             <div class="product-card">
-                <div class="product-image">🎁</div>
-                <div class="product-name">わくわくギフトボックス</div>
-                <div class="product-price">¥2,980</div>
-                <button class="btn btn-cart">カートに入れる 🛒</button>
+                <div class="product-image">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
+                    </svg>
+                </div>
+                <div class="product-details">
+                    <span class="product-category">OUTERWEAR</span>
+                    <h3 class="product-name">Tailored Wool Jacket - Black</h3>
+                    <div class="product-price">¥48,000</div>
+                    <button class="btn btn-cart">ADD TO CART</button>
+                </div>
             </div>
+
             <!-- 商品2 -->
             <div class="product-card">
-                <div class="product-image">🧸</div>
-                <div class="product-name">プレミアムぬいぐるみ</div>
-                <div class="product-price">¥1,800</div>
-                <button class="btn btn-cart">カートに入れる 🛒</button>
+                <div class="product-image">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
+                    </svg>
+                </div>
+                <div class="product-details">
+                    <span class="product-category">FOOTWEAR</span>
+                    <h3 class="product-name">8-Hole Leather Boots</h3>
+                    <div class="product-price">¥32,000</div>
+                    <button class="btn btn-cart">ADD TO CART</button>
+                </div>
             </div>
 
             <!-- 商品3 -->
             <div class="product-card">
-                <div class="product-image">☕</div>
-                <div class="product-name">カフェタイムマグカップ</div>
-                <div class="product-price">¥1,200</div>
-                <button class="btn btn-cart">カートに入れる 🛒</button>
+                <div class="product-image">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
+                    </svg>
+                </div>
+                <div class="product-details">
+                    <span class="product-category">FRAGRANCE</span>
+                    <h3 class="product-name">Solid Perfume - White Magnolia</h3>
+                    <div class="product-price">¥8,500</div>
+                    <button class="btn btn-cart">ADD TO CART</button>
+                </div>
             </div>
 
             <!-- 商品4 -->
             <div class="product-card">
-                <div class="product-image">🌟</div>
-                <div class="product-name">スターライトアクセサリー</div>
-                <div class="product-price">¥3,500</div>
-                <button class="btn btn-cart">カートに入れる 🛒</button>
+                <div class="product-image">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
+                    </svg>
+                </div>
+                <div class="product-details">
+                    <span class="product-category">ACCESSORY</span>
+                    <h3 class="product-name">Silver Tie Pin & Ear Cuff Set</h3>
+                    <div class="product-price">¥14,000</div>
+                    <button class="btn btn-cart">ADD TO CART</button>
+                </div>
             </div>
         </div>
     </div>

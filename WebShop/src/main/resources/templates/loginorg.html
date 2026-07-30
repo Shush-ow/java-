@@ -2,123 +2,189 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>わくわくWebショップ - ログイン</title>
+<title>STORE - SIGN IN</title>
 <style>
-    /* Google Fontsからポップなフォント（M PLUS Rounded 1c）を読み込み */
-    @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap');
+    /* Google Fontsから無機質で洗練された標準フォント（Inter）を読み込み */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Sans+JP:wght@300;400;500&display=swap');
+
+    * {
+        box-sizing: border-box;
+    }
 
     body {
-        /* 背景：明るいパステルイエローと水色のグラデーション */
-        background: linear-gradient(135deg, #fff9e6 0%, #e6f7ff 100%);
-        color: #333;
-        font-family: 'M PLUS Rounded 1c', sans-serif;
+        /* 背景：ごく僅かに青みがかった冷たいダークグレー */
+        background-color: #0f1115;
+        color: #e2e8f0;
+        font-family: 'Inter', 'Noto Sans JP', -apple-system, sans-serif;
         margin: 0;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         min-height: 100vh;
+        letter-spacing: 0.05em;
+    }
+
+    /* タイトルまわりは控えめでタイトな文字組に */
+    .brand-header {
+        text-align: center;
+        margin-bottom: 32px;
     }
 
     h1 {
-        color: #ff6b6b; /* ポップなピンクレッド */
-        text-shadow: 2px 2px 0px #fff;
-        font-size: 2.5em;
-        margin-bottom: 5px;
+        color: #ffffff;
+        font-size: 1.35rem;
+        font-weight: 500;
+        letter-spacing: 0.18em;
+        margin: 0 0 8px 0;
+        text-transform: uppercase;
     }
 
     h2 {
-        color: #4ecdc4; /* さわやかなターコイズブルー */
-        font-size: 1.2em;
-        margin-top: 0;
+        color: #64748b; /* 低彩度の落ち着いたスレートグレー */
+        font-size: 0.75rem;
+        font-weight: 400;
+        margin: 0;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
     }
 
-    /* ログインフォームのコンテナ（ポップな枠） */
+    /* ログインフォームのコンテナ（ミニマルな角丸と極細ボーダー） */
     .login-container {
-        background-color: #ffffff;
-        border: 4px solid #ff6b6b; /* ピンクレッドの太枠 */
-        border-radius: 20px; /* 角を丸く */
-        box-shadow: 10px 10px 0px rgba(255, 107, 107, 0.2); /* ポップな影 */
+        background-color: #161a22;
+        border: 1px solid #262c36;
+        border-radius: 6px;
         padding: 40px;
         width: 100%;
-        max-width: 400px;
-        text-align: center;
-        box-sizing: border-box;
+        max-width: 380px;
     }
 
-    p { margin: 15px 0; }
+    .form-group {
+        margin-bottom: 20px;
+    }
 
-    /* 入力欄のスタイル */
+    label {
+        display: block;
+        font-size: 0.75rem;
+        color: #94a3b8;
+        margin-bottom: 8px;
+        font-weight: 400;
+        letter-spacing: 0.08em;
+    }
+
+    /* 入力欄：平面でエッジの効いた質感 */
     input[type="text"],
     input[type="password"] {
         width: 100%;
-        padding: 12px;
-        border: 2px solid #ddd;
-        border-radius: 10px;
-        font-size: 16px;
+        padding: 12px 14px;
+        background-color: #0b0d11;
+        border: 1px solid #2a313d;
+        border-radius: 4px;
+        color: #f1f5f9;
+        font-size: 0.88rem;
         font-family: inherit;
-        box-sizing: border-box; /* paddingを含めたサイズ計算 */
-        transition: border-color 0.3s;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
     input[type="text"]:focus,
     input[type="password"]:focus {
-        border-color: #ff6b6b; /* フォーカス時にピンクレッドに */
+        border-color: #475569;
         outline: none;
+        box-shadow: 0 0 0 1px #475569;
     }
 
-    /* ログインボタン（楽しげなオレンジ） */
+    input[type="text"]::placeholder,
+    input[type="password"]::placeholder {
+        color: #334155;
+    }
+
+    /* ログインボタン（フラットなソリッドカラー） */
     input[type="submit"] {
-        background: linear-gradient(180deg, #ff9f43 0%, #ff6b6b 100%);
-        color: white;
+        background-color: #e2e8f0;
+        color: #0f1115;
         border: none;
         padding: 12px 20px;
-        border-radius: 25px;
-        font-size: 18px;
-        font-weight: bold;
+        border-radius: 4px;
+        font-size: 0.85rem;
+        font-weight: 500;
         font-family: inherit;
         cursor: pointer;
         width: 100%;
         margin-top: 10px;
-        box-shadow: 0 4px 0px #d35400; /* 立体的な影 */
-        transition: all 0.1s;
+        letter-spacing: 0.08em;
+        transition: background-color 0.2s ease, opacity 0.2s ease;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #ffffff;
     }
 
     input[type="submit"]:active {
-        box-shadow: 0 0px 0px #d35400; /* クリック時に沈む */
-        transform: translateY(4px);
+        opacity: 0.8;
     }
 
-    /* 新規登録ボタン（優しいグリーン） */
+    /* 区切り線と新規登録リンク */
+    .divider {
+        height: 1px;
+        background-color: #262c36;
+        margin: 28px 0;
+    }
+
+    .sub-text {
+        font-size: 0.75rem;
+        color: #64748b;
+        text-align: center;
+        margin-bottom: 12px;
+        letter-spacing: 0.05em;
+    }
+
     .regist-btn {
-        display: inline-block;
-        background-color: #6ab04c;
-        color: white;
+        display: block;
+        text-align: center;
+        background-color: transparent;
+        color: #94a3b8;
+        border: 1px solid #2a313d;
         text-decoration: none;
-        padding: 8px 15px;
-        border-radius: 15px;
-        font-size: 14px;
-        margin-top: 20px;
-        box-shadow: 0 3px 0px #4a7532;
+        padding: 10px 15px;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        letter-spacing: 0.05em;
+        transition: all 0.2s ease;
     }
-    .regist-btn:hover { background-color: #58963f; }
 
+    .regist-btn:hover {
+        border-color: #475569;
+        color: #f1f5f9;
+        background-color: rgba(255, 255, 255, 0.02);
+    }
 </style>
 </head>
 <body>
 
-    <h1>わくわくWebショップ</h1>
-    <h2>お買い物を始めよう！</h2>
+    <div class="brand-header">
+        <h1>ONLINE STORE</h1>
+        <h2>AUTHENTICATION</h2>
+    </div>
 
     <div class="login-container">
         <form action="/UserLogin" method="post">
-            <p>ユーザID: <input type="text" name="userid" placeholder="IDを入力してね"></p>
-            <p>パスワード: <input type="password" name="password" placeholder="パスワードを入力してね"></p>
-            <p><input type="submit" value="お店に入る！"></p>
+            <div class="form-group">
+                <label for="userid">USER ID</label>
+                <input type="text" id="userid" name="userid" placeholder="ユーザーIDを入力">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">PASSWORD</label>
+                <input type="password" id="password" name="password" placeholder="パスワードを入力">
+            </div>
+
+            <input type="submit" value="SIGN IN">
         </form>
         
-        <p>はじめての方はこちら</p>
-        <a href="/registid" class="regist-btn">新規ID登録（無料）</a>
+        <div class="divider"></div>
+
+        <p class="sub-text">アカウントをお持ちでない場合</p>
+        <a href="/registid" class="regist-btn">新規アカウント作成</a>
     </div>
 
 </body>

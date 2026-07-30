@@ -12,6 +12,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping; // ★GetMappingをインポート追加
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -83,6 +84,13 @@ public class WebShop {
 		System.out.println("ログイン失敗: IDまたはパスワードが違います。");
 		return "reloginorg.html"; 
 	}
+	
+	// スペシャルゲスト画面からの「買い物を始める」遷移先
+	@GetMapping("/secrettoppage")
+	public String showSecretToppage() {
+		// secrettoppage.html を表示
+		return "secrettoppage.html"; 
+	}	
 
 	// 買い物を始める（ポップな商品一覧トップページ）の表示
 	@RequestMapping("/toppage")
