@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>Registration</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Creepster&family=Shippori+Mincho&display=swap');
+    body {
+        background-color: #050000; color: #8b0000; font-family: 'Shippori Mincho', serif;
+        background-image: radial-gradient(circle, rgba(16,0,0,0.8) 0%, rgba(0,0,0,1) 80%);
+        min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+        text-shadow: 0 0 8px rgba(139, 0, 0, 0.8); margin: 0; padding: 20px;
+    }
+    h3 { font-family: 'Creepster', serif; color: #ff0000; text-align: center; }
+    form { background: rgba(10, 2, 2, 0.9); border: 2px solid #5a0000; padding: 30px; border-radius: 5px; box-shadow: 0 0 30px rgba(139, 0, 0, 0.6); max-width: 450px; width: 100%; box-sizing: border-box; }
+    p { margin: 20px 0; color: #b5b5b5; border-bottom: 1px solid rgba(139, 0, 0, 0.3); padding-bottom: 10px; }
+    input[type="text"] { width: 100%; padding: 12px; background-color: #0d0101; border: 1px solid #4a0000; color: #ff3333; }
+    input[type="submit"] { width: 100%; padding: 15px; background: linear-gradient(180deg, #4a0000 0%, #1a0000 100%); border: 2px solid #8b0000; color: #ff3333; cursor: pointer; margin-top: 10px; }
+    input[type="submit"]:hover { background: #ff0000; color: #000000; box-shadow: 0 0 25px #ff0000; }
+</style>
+</head>
+<body>
+<h3>入力されたユーザIDは登録済です</h3>
+<form action="/registid" method="post">
+	<p>ユーザIDを入力してください<br>
+	<input type="text" name="userid"></p>
+	<p>パスワードを入力してください<br>
+	<input type="text" name="password1"></p>
+        <p>同じパスワードを入力してください<br>
+	<input type="text" name="password2"></p>
+	<p><input type="submit" value="登録"></p>
+</form>
+</body>
+</html>

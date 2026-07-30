@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Success Login</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Creepster&family=Shippori+Mincho&display=swap');
+    body {
+        background-color: #050000; color: #8b0000; font-family: 'Shippori Mincho', serif;
+        background-image: radial-gradient(circle, rgba(16,0,0,0.8) 0%, rgba(0,0,0,1) 80%);
+        min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+        text-shadow: 0 0 8px rgba(139, 0, 0, 0.8); margin: 0; padding: 20px;
+    }
+    h1, h2 { font-family: 'Creepster', serif; color: #ff0000; text-align: center; }
+    
+    .menu-container { 
+        background: rgba(10, 2, 2, 0.9); 
+        border: 2px solid #5a0000; 
+        padding: 30px; 
+        border-radius: 5px; 
+        box-shadow: 0 0 30px rgba(139, 0, 0, 0.6); 
+        max-width: 450px; 
+        width: 100%; 
+        box-sizing: border-box; 
+    }
+
+    .btn { 
+        display: block;
+        width: 100%; 
+        padding: 15px; 
+        background: linear-gradient(180deg, #4a0000 0%, #1a0000 100%); 
+        border: 2px solid #8b0000; 
+        color: #ff3333; 
+        cursor: pointer; 
+        margin-top: 15px; 
+        text-align: center;
+        text-decoration: none; 
+        font-family: inherit;
+        font-size: 16px;
+        box-sizing: border-box;
+    }
+    .btn:hover { 
+        background: #ff0000; 
+        color: #000000; 
+        box-shadow: 0 0 25px #ff0000; 
+    }
+</style>
+</head>
+<body>
+<h1>Web ショップ販売 システム ログイン成功</h1>
+<h2>ようこそ <span th:text="${name}">顧客名</span> さん</h2>
+
+<div class="menu-container">
+	<a href="/secrettoppage" class="btn">買い物を始める</a>
+
+    <form action="/UserLogout" method="post" style="margin: 0;">
+        <input type="submit" value="ログアウト" class="btn">
+    </form>
+</div>
+
+</body>
+</html>

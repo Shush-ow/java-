@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>STORE - LOGOUT</title>
+<style>
+    /* Google Fontsから無機質で洗練された標準フォント（Inter）を読み込み */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Sans+JP:wght@300;400;500&display=swap');
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        /* 背景：ごく僅かに青みがかった冷たいダークグレー */
+        background-color: #0f1115;
+        color: #e2e8f0;
+        font-family: 'Inter', 'Noto Sans JP', -apple-system, sans-serif;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        letter-spacing: 0.05em;
+    }
+
+    /* タイトルまわり */
+    .brand-header {
+        text-align: center;
+        margin-bottom: 32px;
+    }
+
+    h1 {
+        color: #ffffff;
+        font-size: 1.35rem;
+        font-weight: 500;
+        letter-spacing: 0.18em;
+        margin: 0 0 8px 0;
+        text-transform: uppercase;
+    }
+
+    h2 {
+        color: #64748b; /* 低彩度のスレートグレー */
+        font-size: 0.75rem;
+        font-weight: 400;
+        margin: 0;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+    }
+
+    /* ログアウトコンテナ */
+    .logout-container {
+        background-color: #161a22;
+        border: 1px solid #262c36;
+        border-radius: 6px;
+        padding: 40px;
+        width: 100%;
+        max-width: 380px;
+        text-align: center;
+    }
+
+    .status-message {
+        color: #94a3b8;
+        font-size: 0.88rem;
+        margin: 0 0 28px 0;
+        letter-spacing: 0.05em;
+        font-weight: 400;
+    }
+
+    /* 戻るボタン（ソリッドでフラットなスタイル） */
+    input[type="submit"] {
+        background-color: #e2e8f0;
+        color: #0f1115;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 4px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        font-family: inherit;
+        cursor: pointer;
+        width: 100%;
+        letter-spacing: 0.08em;
+        transition: background-color 0.2s ease, opacity 0.2s ease;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #ffffff;
+    }
+
+    input[type="submit"]:active {
+        opacity: 0.8;
+    }
+</style>
+</head>
+<body>
+
+    <div class="brand-header">
+        <h1>ONLINE STORE</h1>
+        <h2>SESSION ENDED</h2>
+    </div>
+
+    <div class="logout-container">
+        <p class="status-message">ログアウトが完了しました</p>
+
+        <form action="/UserLogin" method="post">
+            <input type="hidden" name="userid" value="LOgIN0000">
+            <input type="hidden" name="password" value="00000000">
+            <input type="submit" value="RETURN TO SIGN IN">
+        </form>
+    </div>
+
+</body>
+</html>
