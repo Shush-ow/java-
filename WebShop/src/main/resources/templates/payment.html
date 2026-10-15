@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STORE - PAYMENT</title>
+
+    <style>
+        /* Google Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Sans+JP:wght@300;400;500&display=swap');
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #0f1115;
+            color: #e2e8f0;
+            font-family: 'Inter', 'Noto Sans JP',
+                         -apple-system, sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            letter-spacing: 0.05em;
+        }
+
+        /* ブランドヘッダー */
+        .brand-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        h1 {
+            color: #ffffff;
+            font-size: 1.35rem;
+            font-weight: 500;
+            letter-spacing: 0.18em;
+            margin: 0 0 8px;
+        }
+
+        .brand-header h2 {
+            color: #64748b;
+            font-size: 0.75rem;
+            font-weight: 400;
+            margin: 0;
+            letter-spacing: 0.1em;
+        }
+
+        /* 決済カード */
+        .payment-container {
+            width: 100%;
+            max-width: 420px;
+            background-color: #161a22;
+            border: 1px solid #262c36;
+            border-radius: 6px;
+            padding: 32px;
+        }
+
+        .payment-title {
+            color: #f1f5f9;
+            font-size: 1.1rem;
+            font-weight: 500;
+            text-align: center;
+            margin: 0 0 28px;
+        }
+
+        /* 合計金額 */
+        .total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            padding: 20px 0;
+            border-top: 1px solid #262c36;
+            border-bottom: 1px solid #262c36;
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+
+        .total-amount {
+            color: #ffffff;
+            font-size: 1.25rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        /* 決済方法 */
+        .payment-method {
+            margin-top: 28px;
+        }
+
+        .payment-method h2 {
+            color: #94a3b8;
+            font-size: 0.75rem;
+            font-weight: 400;
+            letter-spacing: 0.08em;
+            margin: 0 0 14px;
+        }
+
+        .payment-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px;
+            margin-bottom: 10px;
+            border: 1px solid #2a313d;
+            border-radius: 4px;
+            color: #cbd5e1;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: border-color 0.2s ease,
+                        background-color 0.2s ease;
+        }
+
+        .payment-option:hover {
+            border-color: #475569;
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+
+        .payment-option input[type="radio"] {
+            accent-color: #e2e8f0;
+            cursor: pointer;
+        }
+
+        .payment-option:has(input:checked) {
+            border-color: #64748b;
+            background-color: rgba(255, 255, 255, 0.04);
+        }
+
+        /* ボタン */
+        .btn-checkout {
+            display: block;
+            width: 100%;
+            margin-top: 24px;
+            padding: 13px 16px;
+            background-color: #e2e8f0;
+            color: #0f1115;
+            border: none;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: background-color 0.2s ease,
+                        opacity 0.2s ease;
+        }
+
+        .btn-checkout:hover {
+            background-color: #ffffff;
+        }
+
+        .btn-checkout:active {
+            opacity: 0.8;
+        }
+
+        /* 戻るリンク */
+        .back-link {
+            display: block;
+            margin-top: 18px;
+            text-align: center;
+            color: #64748b;
+            font-size: 0.75rem;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .back-link:hover {
+            color: #f1f5f9;
+        }
+
+        /* スマートフォン対応 */
+        @media (max-width: 480px) {
+            body {
+                padding: 24px 16px;
+            }
+
+            .payment-container {
+                padding: 24px 20px;
+            }
+
+            .total-amount {
+                font-size: 1.1rem;
+            }
+        }
+		.cart-section {
+		    margin-top: 28px;
+		}
+
+		.cart-section h2 {
+		    color: #94a3b8;
+		    font-size: 0.85rem;
+		    font-weight: 400;
+		    margin-bottom: 12px;
+		}
+
+		.table-wrapper {
+		    width: 100%;
+		    overflow-x: auto;
+		}
+
+		.cart-table {
+		    width: 100%;
+		    border-collapse: collapse;
+		    color: #cbd5e1;
+		    font-size: 0.75rem;
+		}
+
+		.cart-table th,
+		.cart-table td {
+		    padding: 12px 8px;
+		    text-align: left;
+		    border-bottom: 1px solid #262c36;
+		    white-space: nowrap;
+		}
+
+		.cart-table th {
+		    color: #64748b;
+		    font-weight: 400;
+		}
+		/* 配送先情報 */
+		.shipping-section {
+		    margin-top: 28px;
+		}
+
+		.shipping-title {
+		    color: #94a3b8;
+		    font-size: 0.75rem;
+		    font-weight: 400;
+		    letter-spacing: 0.08em;
+		    margin: 0 0 14px;
+		}
+
+		.shipping-option {
+		    display: flex;
+		    align-items: center;
+		    gap: 12px;
+		    padding: 14px;
+		    margin-bottom: 10px;
+		    border: 1px solid #2a313d;
+		    border-radius: 4px;
+		    color: #cbd5e1;
+		    font-size: 0.85rem;
+		    cursor: pointer;
+		}
+
+		.shipping-option:hover {
+		    border-color: #475569;
+		}
+
+		.shipping-option input {
+		    accent-color: #e2e8f0;
+		}
+
+		.registered-address {
+		    background-color: #0b0d11;
+		    border: 1px solid #262c36;
+		    border-radius: 4px;
+		    padding: 12px 16px;
+		    margin-bottom: 16px;
+		    color: #94a3b8;
+		    font-size: 0.8rem;
+		    overflow-wrap: anywhere;
+		}
+
+		.registered-address p {
+		    margin: 8px 0;
+		    line-height: 1.7;
+		}
+
+		.registered-address strong {
+		    color: #cbd5e1;
+		}
+
+		.address-form[hidden] {
+		    display: none;
+		}
+
+		.address-form {
+		    margin: 12px 0 20px;
+		}
+
+		.address-form .form-group {
+		    margin-bottom: 16px;
+		}
+
+		.address-form label {
+		    display: block;
+		    color: #94a3b8;
+		    font-size: 0.75rem;
+		    margin-bottom: 8px;
+		}
+
+		.address-form input {
+		    width: 100%;
+		    padding: 12px 14px;
+		    background-color: #0b0d11;
+		    border: 1px solid #2a313d;
+		    border-radius: 4px;
+		    color: #f1f5f9;
+		    font-family: inherit;
+		    font-size: 0.85rem;
+		}
+
+		.address-form input:focus {
+		    border-color: #475569;
+		    outline: none;
+		    box-shadow: 0 0 0 1px #475569;
+		}
+
+		.address-form input::placeholder {
+		    color: #475569;
+		}
+    </style>
+</head>
+
+<script>
+    function toggleAddressForm() {
+        const selected = document.querySelector(
+            'input[name="addressType"]:checked'
+        );
+
+        const form = document.getElementById('otherAddressForm');
+        const otherSelected =
+            selected && selected.value === 'other';
+
+        form.hidden = !otherSelected;
+
+        const name = document.getElementById('shippingName');
+        const address = document.getElementById('shippingAddress');
+        const email = document.getElementById('shippingEmail');
+
+        [name, address, email].forEach(input => {
+            input.disabled = !otherSelected;
+            input.required = otherSelected;
+        });
+    }
+
+    // 初期表示を設定
+    document.addEventListener('DOMContentLoaded', toggleAddressForm);
+</script>
+
+<body>
+
+    <div class="brand-header">
+        <h1>ONLINE STORE</h1>
+        <h2>PAYMENT</h2>
+    </div>
+
+    <div class="payment-container">
+
+        <h1 class="payment-title">決済内容の確認</h1>
+        
+		<!-- 注文内容 -->
+		<div class="cart-section">
+		    <h2>注文内容</h2>
+
+		    <div th:if="${!#lists.isEmpty(cart)}"
+		         class="table-wrapper">
+
+		        <table class="cart-table">
+		            <thead>
+		                <tr>
+		                    <th>商品名</th>
+		                    <th>単価</th>
+		                    <th>数量</th>
+		                    <th>小計</th>
+		                </tr>
+		            </thead>
+
+		            <tbody>
+		                <tr th:each="item : ${cart}">
+		                    <td th:text="${item.product.name}"></td>
+
+		                    <td th:text="|¥${#numbers.formatInteger(item.product.price, 1, 'COMMA')}|"></td>
+
+		                    <td th:text="${item.quantity}"></td>
+
+		                    <td th:text="|¥${#numbers.formatInteger(item.totalPrice, 1, 'COMMA')}|"></td>
+		                </tr>
+		            </tbody>
+		        </table>
+		    </div>
+
+		    <p th:if="${#lists.isEmpty(cart)}">
+		        カート内に商品がありません。
+		    </p>
+		</div>
+
+        <!-- 合計金額 -->
+		
+        <div class="total">
+            <span>合計金額</span>
+            <span class="total-amount">
+                ¥<span th:text="${#numbers.formatInteger(totalAmount, 1, 'COMMA')}">0</span>
+            </span>
+        </div>
+
+        <!-- 決済フォーム -->
+        <form action="/checkout" method="post">
+
+            <!-- 決済方法 -->
+            <div class="payment-method">
+                <h2>PAYMENT METHOD / 決済方法</h2>
+
+                <label class="payment-option">
+                    <input type="radio"
+                           name="payment"
+                           value="credit"
+                           checked>
+                    <span>クレジットカード</span>
+                </label>
+
+                <label class="payment-option">
+                    <input type="radio"
+                           name="payment"
+                           value="bank">
+                    <span>銀行振込</span>
+                </label>
+
+                <label class="payment-option">
+                    <input type="radio"
+                           name="payment"
+                           value="convenience">
+                    <span>コンビニ払い</span>
+                </label>
+            </div>
+			
+			<!-- 配送先情報 -->
+			<div class="shipping-section">
+
+			    <h2 class="shipping-title">
+			        SHIPPING ADDRESS / 配送先情報
+			    </h2>
+
+			    <!-- 登録済み住所を使う -->
+			    <label class="shipping-option">
+			        <input type="radio"
+			               name="addressType"
+			               value="registered"
+			               checked
+			               onchange="toggleAddressForm()">
+
+			        <span>会員登録済みの住所を使う</span>
+			    </label>
+
+			    <div class="registered-address">
+			        <p>
+			            <strong>氏名：</strong>
+			            <span th:text="${user.username}"></span>
+			        </p>
+
+			        <p>
+			            <strong>住所：</strong>
+			            <span th:text="${user.address}"></span>
+			        </p>
+
+			        <p>
+			            <strong>メールアドレス：</strong>
+			            <span th:text="${user.email}"></span>
+			        </p>
+			    </div>
+
+			    <!-- 別の住所を使う -->
+			    <label class="shipping-option">
+			        <input type="radio"
+			               name="addressType"
+			               value="other"
+			               onchange="toggleAddressForm()">
+
+			        <span>別の住所に配送する</span>
+			    </label>
+
+			    <!-- 別の住所を選んだときだけ表示 -->
+			    <div id="otherAddressForm"
+			         class="address-form"
+			         hidden>
+
+			        <div class="form-group">
+			            <label for="shippingName">お届け先氏名</label>
+			            <input type="text"
+			                   id="shippingName"
+			                   name="shippingName"
+			                   placeholder="例：山田 花子"
+			                   maxlength="100"
+			                   disabled>
+			        </div>
+
+			        <div class="form-group">
+			            <label for="shippingAddress">お届け先住所</label>
+			            <input type="text"
+			                   id="shippingAddress"
+			                   name="shippingAddress"
+			                   placeholder="都道府県・市区町村・番地・建物名"
+			                   maxlength="255"
+			                   disabled>
+			        </div>
+
+			        <div class="form-group">
+			            <label for="shippingEmail">メールアドレス</label>
+			            <input type="email"
+			                   id="shippingEmail"
+			                   name="shippingEmail"
+			                   placeholder="example@example.com"
+			                   maxlength="254"
+			                   disabled>
+			        </div>
+			    </div>
+
+			</div>
+			
+
+            <button type="submit" class="btn-checkout">
+                注文を確定する
+            </button>
+
+        </form>
+
+        <a href="javascript:history.back()" class="back-link">
+            前のページに戻る
+        </a>
+
+    </div>
+
+</body>
+</html>

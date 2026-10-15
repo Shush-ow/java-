@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>SHOPPING CART</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+    body { background-color: #0f1115; color: #e2e8f0; font-family: 'Inter', sans-serif; margin: 0; padding: 40px 20px; display: flex; justify-content: center; }
+    .cart-container { background-color: #161a22; border: 1px solid #262c36; border-radius: 6px; padding: 32px; width: 100%; max-width: 650px; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
+    th, td { border-bottom: 1px solid #262c36; padding: 12px; text-align: left; font-size: 0.85rem; }
+    th { color: #64748b; }
+    .total { text-align: right; font-size: 1.1rem; font-weight: 600; margin-bottom: 24px; }
+    .btn-checkout { background-color: #e2e8f0; color: #0f1115; border: none; padding: 12px; width: 100%; border-radius: 4px; font-weight: 600; cursor: pointer; }
+	.btn-payment { background-color: #e2e8f0; color: #0f1115; border: none; padding: 12px; width: 100%; border-radius: 4px; font-weight: 600; cursor: pointer; }
+    .btn-remove { background: none; border: 1px solid #475569; color: #94a3b8; border-radius: 4px; cursor: pointer; }
+    a { color: #94a3b8; text-decoration: none; font-size: 0.8rem; }
+</style>
+</head>
+<body>
+    <div class="cart-container">
+        <h2>SHOPPING CART</h2>
+        <div th:if="${#lists.isEmpty(cart)}">
+            <p>カート内に商品はありません。</p>
+            <a href="/toppage">← 商品一覧へ戻る</a>
+        </div>
+        <div th:if="${!#lists.isEmpty(cart)}">
+            <table>
+                <tr><th>商品名</th><th>単価</th><th>数量</th><th>小計</th><th>操作</th></tr>
+                <tr th:each="item : ${cart}">
+                    <td th:text="${item.product.name}"></td>
+                    <td th:text="'¥' + ${item.product.price}"></td>
+                    <td th:text="${item.quantity}"></td>
+                    <td th:text="'¥' + ${item.totalPrice}"></td>
+                    <td>
+                        <form action="/cart/remove" method="post">
+                            <input type="hidden" name="productId" th:value="${item.product.id}">
+                            <button type="submit" class="btn-remove">削除</button>
+                        </form>
+                    </td>
+                </tr>
+            </table>
+            <div class="total">合計金額: ¥<span th:text="${#numbers.formatInteger(totalAmount, 1, 'COMMA')}">0</span></div>
+            
+			<form action="/payment" method="get">
+			<button type="submit" class="btn-payment">レジに進んで決済方法を確定する</button>
+			</form>
+			
+            <br>
+            <a href="/toppage">← 買い物を続ける</a>
+        </div>
+    </div>
+</body>
+</html>
