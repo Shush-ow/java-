@@ -1,0 +1,119 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>購入履歴</title>
+    <style>
+        body {
+            background-color: #0f1115;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+        }
+
+        .order {
+            background-color: #161a22;
+            border: 1px solid #303642;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .order-info {
+            color: #b0b8c5;
+            margin-bottom: 15px;
+        }
+
+        .item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #303642;
+        }
+
+        .total {
+            text-align: right;
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 20px;
+            color: #7db7ff;
+            text-decoration: none;
+        }
+
+        .empty {
+            background-color: #161a22;
+            padding: 25px;
+            border-radius: 10px;
+            color: #b0b8c5;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <h1>購入履歴</h1>
+
+    <!-- 購入履歴がない場合 -->
+    <div class="empty" th:if="${#lists.isEmpty(orders)}">
+        まだ購入履歴はありません。
+    </div>
+
+    <!-- 注文情報を繰り返し表示 -->
+    <div class="order" th:each="order : ${orders}">
+
+        <h2 th:text="'注文番号：' + ${order.id}"></h2>
+
+        <div class="order-info">
+            <p>
+                注文日時：
+                <span th:text="${order.orderedAt}"></span>
+            </p>
+
+            <p>
+                支払い方法：
+                <span th:text="${order.paymentMethod}"></span>
+            </p>
+        </div>
+
+        <!-- 注文した商品 -->
+        <div th:each="detail : ${order.details}">
+            <div class="item">
+                <span th:text="${detail.productName}"></span>
+                <span>
+                    <span th:text="${detail.quantity}"></span>個
+                    ×
+                    <span th:text="${detail.unitPrice}"></span>円
+                </span>
+            </div>
+        </div>
+
+        <div class="total">
+            合計：
+            <span th:text="${order.totalAmount}"></span>円
+        </div>
+
+    </div>
+
+    <a href="/toppage" class="back">トップページに戻る</a>
+
+</div>
+
+</body>
+</html>

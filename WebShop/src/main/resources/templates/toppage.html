@@ -34,6 +34,7 @@
         <div class="user-info">
             <a href="/UserEdit" class="user-link">USER: <span th:text="${name}">GUEST</span></a>
             <a href="/cart" class="btn-cart-nav">🛒 カート (<span th:text="${cartCount}">0</span>)</a>
+			<a href="/history" class="btn-cart-nav">購入履歴</a>
             <form action="/UserLogout" method="post" style="margin:0;">
                 <input type="submit" value="LOGOUT" class="btn btn-logout">
             </form>
