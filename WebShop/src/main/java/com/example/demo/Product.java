@@ -8,23 +8,25 @@ import jakarta.persistence.Table;
 @Table(name = "products")
 public class Product {
     @Id
-    private String id;
+    private Integer id;
     private String name;
     private String category;
     private int price;
     private String image;
-
+    private int stock;
+    
     public Product() {}
-    public Product(String id, String name, String category, int price, String image) {
+    public Product(Integer id, String name, String category, int price, String image) {
         this.id = id;
         this.name = name;
         this.category = category;
         this.price = price;
         this.image = image;
+        this.stock = 10;
     }
 
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
+    public Integer getId() { return id; }
+    public void setId(Integer id) { this.id = id; }
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
     public String getCategory() { return category; }
@@ -33,4 +35,6 @@ public class Product {
     public void setPrice(int price) { this.price = price; }
     public String getImage() { return image; }
     public void setImage(String image) { this.image = image; }
+    public int getStock() {return stock;}
+    public void setStock(int stock) {   this.stock = stock;}
 }

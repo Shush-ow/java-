@@ -28,6 +28,14 @@ public class WebShop {
     @Autowired
     private ProductRepository productRepository;
     
+    @Autowired
+    private OrderService orderService;
+    
+    @Autowired
+    private OrderRepository orderRepository;
+    
+    @Autowired
+    private OrderDetailRepository detailRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(WebShop.class, args);
@@ -37,12 +45,32 @@ public class WebShop {
     @PostConstruct
     public void initData() {
         if (productRepository.count() == 0) {
-            productRepository.save(new Product("P001", "Tailored Wool Jacket - Black", "OUTERWEAR", 48000 , "C:\\Users\\ktc\\Desktop\\workspace\\WebShop\\src\\main\\resources\\static\\images\\book_hondana_syodana.png"));
-            productRepository.save(new Product("P002", "8-Hole Leather Boots", "FOOTWEAR", 32000 , "C:\\Users\\ktc\\Desktop\\workspace\\WebShop\\src\\main\\resources\\static\\images\\book_hondana_syodana.png"));
-            productRepository.save(new Product("P003", "Solid Perfume - White Magnolia", "FRAGRANCE", 8500 , "C:\\Users\\ktc\\Desktop\\workspace\\WebShop\\src\\main\\resources\\static\\images\\book_hondana_syodana.png"));
-            productRepository.save(new Product("P004", "Silver Tie Pin & Ear Cuff Set", "ACCESSORY", 14000 , "C:\\Users\\ktc\\Desktop\\workspace\\WebShop\\src\\main\\resources\\static\\images\\book_hondana_syodana.png"));
-        }
-    }
+        	productRepository.save(
+                    new Product(1, "Tailored Wool Jacket - Black",
+                        "OUTERWEAR", 48000,
+                        "C:\\Users\\ktc\\Desktop\\workspace\\WebShop\\src\\main\\resources\\static\\images\\book_hondana_syodana.png")
+                );
+        	 productRepository.save(
+        	            new Product(2, "8-Hole Leather Boots",
+        	                "FOOTWEAR", 32000,
+        	                "C:\\Users\\ktc\\Desktop\\workspace\\WebShop\\src\\main\\resources\\static\\images\\book_hondana_syodana.png")
+        	        );
+
+        	        productRepository.save(
+        	            new Product(3, "Solid Perfume - White Magnolia",
+        	                "FRAGRANCE", 8500,
+        	                "C:\\Users\\ktc\\Desktop\\workspace\\WebShop\\src\\main\\resources\\static\\images\\book_hondana_syodana.png")
+        	        );
+
+        	        productRepository.save(
+        	            new Product(4, "Silver Tie Pin & Ear Cuff Set",
+        	                "ACCESSORY", 14000,
+        	                "C:\\Users\\ktc\\Desktop\\workspace\\WebShop\\src\\main\\resources\\static\\images\\book_hondana_syodana.png")
+        	        );
+        	    }
+        	}
+
+           
 
     @RequestMapping("/WebShop")
     public String Start() {
@@ -121,29 +149,46 @@ public class WebShop {
         return "toppage.html";
     }
 
-    // カート追加処理
+ // カート追加処理
     @SuppressWarnings("unchecked")
     @PostMapping("/cart/add")
-    public String addToCart(@RequestParam("productId") String productId, HttpSession session) {
-        List<CartItem> cart = (List<CartItem>) session.getAttribute("cart");
-        if (cart == null) cart = new ArrayList<>();
+    public String addToCart(
+            @RequestParam("productId") Integer productId,
+            HttpSession session) {
 
-        Optional<Product> prodOpt = productRepository.findById(productId);
+        List<CartItem> cart =
+            (List<CartItem>) session.getAttribute("cart");
+
+        if (cart == null) {
+            cart = new ArrayList<>();
+        }
+
+        Optional<Product> prodOpt =
+            productRepository.findById(productId);
+
         if (prodOpt.isPresent()) {
+
             Product product = prodOpt.get();
+
             boolean exists = false;
+
             for (CartItem item : cart) {
+
                 if (item.getProduct().getId().equals(productId)) {
+
                     item.setQuantity(item.getQuantity() + 1);
                     exists = true;
                     break;
                 }
             }
+
             if (!exists) {
                 cart.add(new CartItem(product, 1));
             }
         }
+
         session.setAttribute("cart", cart);
+
         return "redirect:/toppage";
     }
 
@@ -212,10 +257,45 @@ public class WebShop {
     
 
     // 購入確定（レジ完了処理）
+    @SuppressWarnings("unchecked")
     @PostMapping("/checkout")
-    public String checkout(HttpSession session) {
-        session.removeAttribute("cart");
-        return "buyaccept.html";
+    public String checkout(
+            @RequestParam("payment") String paymentMethod,
+            HttpSession session,
+            org.springframework.web.servlet.mvc.support.RedirectAttributes redirectAttributes) {
+
+        // ログイン中のユーザーIDを取得
+        String userid = (String) session.getAttribute("userid");
+
+        if (userid == null) {
+            return "reloginorg.html";
+        }
+
+        // カート情報を取得
+        List<CartItem> cart =
+                (List<CartItem>) session.getAttribute("cart");
+
+        if (cart == null || cart.isEmpty()) {
+            return "redirect:/cart";
+        }
+
+        try {
+            // OrderServiceで購入処理を実行
+            orderService.purchase(userid, cart, paymentMethod);
+
+            // 購入成功後にカートを削除
+            session.removeAttribute("cart");
+
+            return "buyaccept.html";
+
+        } catch (IllegalArgumentException e) {
+
+            // エラーメッセージを決済画面に渡す
+            redirectAttributes.addFlashAttribute(
+                    "checkoutError", e.getMessage());
+
+            return "redirect:/payment";
+        }
     }
    
 
@@ -242,5 +322,32 @@ public class WebShop {
     public String logout(HttpSession session) {
         session.invalidate();
         return "logout.html";
+    }
+    
+ // 購入履歴画面
+    @GetMapping("/history")
+    public String history(HttpSession session, Model model) {
+
+        String userid = (String) session.getAttribute("userid");
+
+        if (userid == null) {
+            return "redirect:/login";
+        }
+
+        // ユーザーの注文情報を取得
+        List<Order> orders =
+                orderRepository.findByUserIdOrderByOrderedAtDesc(userid);
+
+        // 注文ごとに商品明細を取得
+        for (Order order : orders) {
+            List<OrderDetail> details =
+                    detailRepository.findByOrderId(order.getId());
+
+            order.setDetails(details);
+        }
+
+        model.addAttribute("orders", orders);
+
+        return "history.html";
     }
 }
