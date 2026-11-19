@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Xanadu - PRODUCT DETAIL</title>
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Sans+JP:wght@300;400;500&display=swap');
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        background-color: #0f1115;
+        color: #e2e8f0;
+        font-family: 'Inter', 'Noto Sans JP', sans-serif;
+        margin: 0;
+        min-height: 100vh;
+    }
+
+    /* ヘッダー */
+    header {
+        background-color: #161a22;
+        border-bottom: 1px solid #262c36;
+        padding: 18px 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    h1 {
+        font-size: 1.25rem;
+        font-weight: 500;
+        color: #ffffff;
+        letter-spacing: 0.2em;
+        margin: 0;
+    }
+
+    .user-info {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .btn {
+        padding: 8px 16px;
+        border-radius: 4px;
+        font-size: 0.78rem;
+        text-decoration: none;
+        cursor: pointer;
+        border: none;
+        font-family: inherit;
+    }
+
+    .btn-logout {
+        background: transparent;
+        color: #94a3b8;
+        border: 1px solid #2a313d;
+    }
+
+    .btn-cart-nav {
+        background-color: #2a313d;
+        color: #f1f5f9;
+        text-decoration: none;
+        padding: 8px 14px;
+        border-radius: 4px;
+        font-size: 0.8rem;
+    }
+
+    .user-link {
+        display: inline-block;
+        padding: 10px 16px;
+        border: 1px solid #334155;
+        border-radius: 8px;
+        font-size: 0.8rem;
+        color: #94a3b8;
+        text-decoration: none;
+        cursor: pointer;
+        background-color: #1e293b;
+        transition: all 0.2s ease;
+    }
+
+    .user-link:hover {
+        color: #ffffff;
+        border-color: #38bdf8;
+        background-color: #334155;
+        box-shadow: 0 0 8px rgba(56, 189, 248, 0.2);
+    }
+
+    /* メインコンテンツ */
+    .container {
+        max-width: 1100px;
+        margin: 40px auto;
+        padding: 0 24px;
+    }
+
+    .page-title {
+        font-size: 1.1rem;
+        font-weight: 500;
+        letter-spacing: 0.1em;
+        border-bottom: 1px solid #262c36;
+        padding-bottom: 16px;
+        margin-bottom: 30px;
+    }
+
+    /* 商品詳細 */
+    .product-detail {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 50px;
+        background-color: #161a22;
+        border: 1px solid #262c36;
+        border-radius: 6px;
+        padding: 35px;
+    }
+
+    .product-image-area {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #0f1115;
+        border-radius: 6px;
+        padding: 25px;
+        min-height: 350px;
+    }
+
+    .product-image {
+        width: 100%;
+        max-height: 400px;
+        object-fit: contain;
+    }
+
+    .product-info {
+        display: flex;
+        flex-direction: column;
+        padding: 15px 0;
+    }
+
+    .product-id {
+        font-size: 0.75rem;
+        color: #64748b;
+        margin-bottom: 15px;
+    }
+
+    .product-category {
+        font-size: 0.8rem;
+        color: #64748b;
+        margin-bottom: 10px;
+    }
+
+    .product-name {
+        font-size: 1.5rem;
+        font-weight: 500;
+        color: #ffffff;
+        margin: 0 0 25px 0;
+    }
+
+    .product-price {
+        font-size: 1.5rem;
+        font-weight: 500;
+        color: #ffffff;
+        margin-bottom: 30px;
+    }
+
+    .separator {
+        border: none;
+        border-top: 1px solid #262c36;
+        width: 100%;
+        margin-bottom: 25px;
+    }
+
+    /* カートボタン */
+    .btn-cart {
+        background-color: #e2e8f0;
+        color: #0f1115;
+        width: 100%;
+        padding: 14px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: 500;
+        font-size: 0.85rem;
+        border: none;
+        font-family: inherit;
+        transition: background-color 0.2s ease;
+    }
+
+    .btn-cart:hover {
+        background-color: #cbd5e1;
+    }
+
+    /* 戻るボタン */
+    .back-link {
+        display: inline-block;
+        margin-top: 30px;
+        color: #94a3b8;
+        text-decoration: none;
+        font-size: 0.85rem;
+        transition: color 0.2s ease;
+    }
+
+    .back-link:hover {
+        color: #ffffff;
+    }
+
+    /* 画面が狭い場合 */
+    @media (max-width: 700px) {
+        header {
+            padding: 18px 20px;
+        }
+
+        .product-detail {
+            grid-template-columns: 1fr;
+            gap: 25px;
+            padding: 20px;
+        }
+
+        .product-image-area {
+            min-height: 250px;
+        }
+
+        .user-info {
+            gap: 8px;
+        }
+    }
+
+</style>
+</head>
+
+<body>
+
+    <!-- ヘッダー -->
+    <header>
+        <h1>Xanadu</h1>
+        <div class="user-info">
+            <a href="/UserEdit" class="user-link">USER:<span th:text="${name}">GUEST</span></a>
+            <a href="/cart" class="btn-cart-nav">🛒 カート (<span th:text="${cartCount}">0</span>)</a>
+
+            <form action="/UserLogout" method="post" style="margin:0;">
+                <input type="submit" value="LOGOUT" class="btn btn-logout"></form>
+        </div>
+    </header>
+
+
+    <!-- 商品詳細 -->
+    <div class="container">
+        <h2 class="page-title">PRODUCT DETAIL</h2>
+        <div class="product-detail">
+
+            <!-- 商品画像 -->
+            <div class="product-image-area">
+                <img th:src="@{'/images/' + ${product.image}}" alt="商品画像" class="product-image">
+            </div>
+
+
+            <!-- 商品情報 -->
+            <div class="product-info">
+                <span class="product-id" th:text="'PRODUCT ID : ' + ${product.id}">PRODUCT ID</span>
+                <span class="product-category" th:text="${product.category}">CATEGORY</span>
+
+                <h2 class="product-name" th:text="${product.name}">Product Name</h2>
+
+                <div class="product-price" th:text="'¥' + ${#numbers.formatInteger(product.price, 1, 'COMMA')}">¥0</div>
+                <hr class="separator">
+
+                <!-- カートに追加 -->
+                <form action="/cart/add" method="post">
+                    <input type="hidden" name="productId" th:value="${product.id}">
+                    <button type="submit" class="btn-cart">ADD TO CART</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 商品一覧へ戻る -->
+        <a href="/toppage" class="back-link">← BACK TO COLLECTION</a>
+
+    </div>
+
+</body>
+</html>
