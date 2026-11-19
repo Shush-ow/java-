@@ -149,6 +149,18 @@ public class WebShop {
         return "toppage.html";
     }
 
+  // 商品詳細ページ
+    @GetMapping("/product/{id}")
+    public String productDetail(@PathVariable("id") String id, Model model) {
+        // 商品IDから商品情報を取得
+        Product product = productRepository.findById(id).orElse(null);
+        // 商品が存在しない場合は商品一覧へ戻る
+        if (product == null) { return "redirect:/toppage";}
+        // 商品情報をHTMLに渡す
+        model.addAttribute("product", product);
+        return "product_detail";
+    }
+
  // カート追加処理
     @SuppressWarnings("unchecked")
     @PostMapping("/cart/add")
@@ -307,9 +319,13 @@ public class WebShop {
     // 会員登録（MySQLへ保存）
     @PostMapping("/RegistUserID")
     public String registerUser(
-            @RequestParam String userid, @RequestParam String password1, @RequestParam String password2,
-            @RequestParam String username, @RequestParam String address, @RequestParam String email) {
-
+            @RequestParam("userid") String userid, 
+            @RequestParam("password1") String password1, 
+            @RequestParam("password2") String password2,
+            @RequestParam("username") String username, 
+            @RequestParam("address") String address, 
+            @RequestParam("email") String email) {
+    	
         if (!password1.equals(password2)) return "registpassdeny.html";
         if (userRepository.existsById(userid)) return "registidexisting.html";
 
@@ -317,14 +333,70 @@ public class WebShop {
         userRepository.save(newUser);
         return "registaccept.html";
     }
-
-    @PostMapping("/UserLogout")
-    public String logout(HttpSession session) {
-        session.invalidate();
-        return "logout.html";
-    }
     
- // 購入履歴画面
+    // 会員情報変更(MySQLに上書き)
+    @GetMapping("/UserEdit")
+    public String userEdit(HttpSession session, Model model) {
+        String userid = (String) session.getAttribute("userid");
+        System.out.println("UserEdit userid = " + userid);
+        if (userid == null) {
+            return "redirect:/WebShop";
+        }
+        User user = userRepository.findById(userid).orElse(null);
+        if (user == null) {
+            return "redirect:/WebShop";
+        }
+        model.addAttribute("user", user);
+        return "useredit.html";
+    }
+
+      // 会員情報変更（MySQLに上書き）
+    @PostMapping("/UpdateUser")
+    public String updateUser(
+            Model model,
+            @RequestParam("userid") String userid,
+            @RequestParam("currentPassword") String currentPassword,
+            @RequestParam("newPassword") String newPassword,
+            @RequestParam("username") String username,
+            @RequestParam("address") String address,
+            @RequestParam("email") String email,
+            HttpSession session) {
+
+        // 現在のユーザーを取得
+        User user = userRepository.findById(userid).orElse(null);
+
+        if (user == null) {
+            return "usernotfound.html";
+        }
+
+        // 現在のパスワードが正しいか確認
+        if (!user.getPassword().equals(currentPassword)) {
+            model.addAttribute("errorMessage", "現在のパスワードが正しくありません。");
+
+            // 編集画面に必要なユーザー情報を渡す
+            model.addAttribute("user", user);
+
+            return "useredit.html";
+        }
+
+        // 新しいパスワードに変更
+        user.setPassword(newPassword);
+
+        // その他のユーザー情報を変更
+        user.setUsername(username);
+        user.setAddress(address);
+        user.setEmail(email);
+
+        // MySQLへ保存
+        userRepository.save(user);
+
+        // セッションに保存しているユーザー名も更新
+        session.setAttribute("userName", username);
+
+        return "updateaccept.html";
+    }   
+
+    // 購入履歴画面
     @GetMapping("/history")
     public String history(HttpSession session, Model model) {
 
@@ -349,5 +421,11 @@ public class WebShop {
         model.addAttribute("orders", orders);
 
         return "history.html";
+    }
+    
+    @PostMapping("/UserLogout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "logout.html";
     }
 }
